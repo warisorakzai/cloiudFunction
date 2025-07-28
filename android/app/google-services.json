@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1001936629520",
+    "project_id": "gppp-d12b9",
+    "storage_bucket": "gppp-d12b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001936629520:android:d3eb6e4dc6ed57aeaa3f95",
+        "android_client_info": {
+          "package_name": "com.example.cloudfunction"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6xK32lJKbWIC3fOWXqUxEWB1rK9aQwlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
