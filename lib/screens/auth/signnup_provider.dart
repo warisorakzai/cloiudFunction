@@ -3,12 +3,9 @@ import 'package:flutter/foundation.dart';
 
 class SignnupProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? _user;
-  User? get user => _user;
+  User? get user => _auth.currentUser;
 
-  SignnupProvider() {
-    _user = _auth.currentUser;
-  }
+  SignnupProvider() {}
 
   Future SignupwithEmailandPassword(
     String email,

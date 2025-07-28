@@ -1,14 +1,20 @@
-import 'package:flutter/material.dart'
-    show BorderRadius, BorderSide, BuildContext, Color, Colors, EdgeInsets, Icon, IconData, Icons, InputDecoration, OutlineInputBorder, StatelessWidget, Text, TextFormField, TextStyle, Widget, TextEditingController;
+import 'package:flutter/material.dart';
 
 class CoustomTextField extends StatelessWidget {
-  final text;
+  final String text;
   final IconData iconData;
-  CoustomTextField({super.key, required this.text, required this.iconData});
+  final TextEditingController controller;
+  const CoustomTextField({
+    super.key,
+    required this.text,
+    required this.iconData,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         hint: Text(text, style: TextStyle(color: Colors.white)),
         prefixIcon: Icon(iconData, color: Colors.white),
@@ -27,25 +33,24 @@ class CoustomTextField extends StatelessWidget {
   }
 }
 
-
 class passwordField extends StatelessWidget {
-    // final TextEditingController controller;
+  // final TextEditingController controller;
   final IconData icon;
   final IconData icons;
-  final text;
- passwordField({
+  final String text;
+  final TextEditingController controller;
+  const passwordField({
     super.key,
     required this.icon,
     required this.text,
     required this.icons,
-    // required this.controller
-    
+    required this.controller,
   });
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // controller: controller,
+      controller: controller,
       decoration: InputDecoration(
         prefixIcon: Icon(icons, color: Colors.white),
 

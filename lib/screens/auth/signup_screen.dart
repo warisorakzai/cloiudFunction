@@ -48,16 +48,25 @@ class SignupScreen extends StatelessWidget {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-              CoustomTextField(text: 'Name', iconData: Icons.person),
+              CoustomTextField(
+                text: 'Name',
+                iconData: Icons.person,
+                controller: nameController,
+              ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-              CoustomTextField(text: 'Email', iconData: Icons.email),
+              CoustomTextField(
+                text: 'Email',
+                iconData: Icons.email,
+                controller: emailController,
+              ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
               passwordField(
                 icons: Icons.password,
                 text: 'Password',
                 icon: Icons.remove_red_eye,
+                controller: passwordController,
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
@@ -65,6 +74,7 @@ class SignupScreen extends StatelessWidget {
                 icons: Icons.password,
                 text: 'Confirm Password',
                 icon: Icons.remove_red_eye,
+                controller: confirmPasswordController,
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               GestureDetector(

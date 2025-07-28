@@ -44,13 +44,18 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-            CoustomTextField(text: 'Email', iconData: Icons.email),
+            CoustomTextField(
+              text: 'Email',
+              iconData: Icons.email,
+              controller: emailcontroller,
+            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
             passwordField(
               icon: Icons.remove_red_eye,
               text: 'Password',
               icons: Icons.password,
+              controller: passwordController,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             GestureDetector(
@@ -70,21 +75,13 @@ class LoginScreen extends StatelessWidget {
                   );
                 }
               },
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  );
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(child: Text('Login')),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: Center(child: Text('Login')),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),

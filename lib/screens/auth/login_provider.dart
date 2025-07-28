@@ -20,4 +20,10 @@ class LoginProvider with ChangeNotifier {
       return e.message;
     }
   }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+    _user = null;
+    notifyListeners();
+  }
 }
