@@ -1,8 +1,11 @@
+import 'package:cloudfunction/Model/user_model.dart';
 import 'package:cloudfunction/core/CoustomWidgets.dart';
+import 'package:cloudfunction/core/Notification_service%20.dart';
 import 'package:cloudfunction/screens/auth/login_screen.dart';
 import 'package:cloudfunction/screens/auth/signnup_provider.dart';
 import 'package:cloudfunction/screens/home_screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +20,10 @@ class SignupScreen extends StatelessWidget {
     final TextEditingController confirmPasswordController =
         TextEditingController();
     final authprovider = Provider.of<SignnupProvider>(context, listen: false);
+    final notificationProvider = Provider.of<NotificationService>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 33, 33, 33),
 
@@ -80,21 +87,46 @@ class SignupScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   final message = await authprovider.SignupwithEmailandPassword(
-                    emailController.text,
-                    passwordController.text,
-                    nameController.text,
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                    nameController.text.trim(),
                   );
+
                   if (message != null) {
+                    // Signup failed — show error
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(SnackBar(content: Text(message)));
-                  } else {
+                    return;
+                  }
+
+                  // Signup success — now safe to access currentUser
+                  final token = await notificationProvider.getDeviceToken(context);
+                  final uid = FirebaseAuth.instance.currentUser?.uid;
+
+                  if (uid != null) {
+                    final appUser = AppUser(
+                      uid: uid,
+                      name: nameController.text,
+                      email: emailController.text,
+                      token: token,
+                    );
+                    await authprovider.saveUserData(user: appUser);
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const HomeScreen()),
                     );
+                  } else {
+                    // Somehow currentUser is still null — show error
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("User data not found. Please try again."),
+                      ),
+                    );
                   }
                 },
+
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.05,
                   decoration: BoxDecoration(

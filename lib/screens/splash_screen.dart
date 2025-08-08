@@ -1,8 +1,7 @@
+import 'package:cloudfunction/core/Notification_service%20.dart';
 import 'package:cloudfunction/screens/auth/login_screen.dart';
 import 'package:cloudfunction/screens/auth/signnup_provider.dart';
-import 'package:cloudfunction/screens/auth/signup_screen.dart';
 import 'package:cloudfunction/screens/home_screen/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,11 +29,17 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
+
+  final notificationService = Provider.of<NotificationService>(context, listen: false);
+  notificationService.requestNotification();
+  notificationService.firebaseInit(context);
+  notificationService.setUpInteractMessage(context);
     splashScreen();
-  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.blueAccent.withOpacity(0.6),
             ),
             child: Icon(Icons.edit, size: 40, color: Colors.blue),
-          ),
+          ), 
           SizedBox(height: screenHeight / 25),
           Center(
             child: Text(
