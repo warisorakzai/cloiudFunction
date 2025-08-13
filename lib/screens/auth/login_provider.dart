@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 class LoginProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   User? _user;
   User? get user => _user;
   LoginProvider() {
@@ -14,6 +17,16 @@ class LoginProvider with ChangeNotifier {
         email: email,
         password: password,
       );
+
+      _user = credential.user;
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      if (_user != null && token != null) {
+        await _firestore.collection('users').doc(_user!.uid).set({
+          'email': _user!.email,
+          'token': token,
+        }, SetOptions(merge: true));
+      }
       notifyListeners();
       return null;
     } on FirebaseAuthException catch (e) {

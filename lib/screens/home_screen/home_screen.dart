@@ -123,7 +123,8 @@ class HomeScreen extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () {
-                              noteProvider.deleteNotes(note.id);
+                             final noteId = note.id;
+                               context.read<NotesProvider>().deleteNotes(noteId,);
                             },
                             icon: Icon(Icons.delete),
                           ),
@@ -215,6 +216,7 @@ void ShowAddBottomSheet(BuildContext context, {Note? note}) {
                               await noteProvider.addNotes(
                                 titlecontroller.text,
                                 descriptioncontroller.text,
+                                
                               );
                             } else {
                               await noteProvider.updateNotes(

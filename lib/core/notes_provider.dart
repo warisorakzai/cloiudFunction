@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloudfunction/Model/Notes_model.dart';
+import 'package:cloudfunction/core/services/send_notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,21 @@ class NotesProvider with ChangeNotifier {
       final uid = user?.uid;
       if (uid == null) return;
 
+      final userDoc = await _firestore.collection('users').doc(uid).get();
+      String? userToken = userDoc.data()?['token'];
+
       final docRef = await _firestore.collection('notes').add({
         'userId': uid,
         'title': title,
         'description': description,
         'createdAt': FieldValue.serverTimestamp(),
       });
+      await SendNotificationService.sendNotificationUsingApi(
+        token: userToken,
+        title: 'New Note Added',
+        body: 'Your note "$title" has been added successfully.',
+        data: {"type": "note_add", "noteId": docRef.id},
+      );
 
       final note = Note(id: docRef.id, title: title, description: description);
 
@@ -62,8 +72,20 @@ class NotesProvider with ChangeNotifier {
 
   Future<void> deleteNotes(String noteId) async {
     try {
+      final uid = user?.uid;
+      if (uid == null) return;
+
+      final userDoc = await _firestore.collection('users').doc(uid).get();
+      String? userToken = userDoc.data()?['token'];
       await _firestore.collection('notes').doc(noteId).delete();
       _notes.removeWhere((note) => note.id == noteId);
+
+      await SendNotificationService.sendNotificationUsingApi(
+        token: userToken,
+        title: 'Note Deleted',
+        body: 'One of your notes was deleted successfully.',
+        data: {"type": "note_delete", "noteId": noteId},
+      );
       notifyListeners();
     } catch (e) {
       print('Error deleting note: $e');
@@ -76,6 +98,18 @@ class NotesProvider with ChangeNotifier {
     String description,
   ) async {
     try {
+      final uid = user?.uid;
+      if (uid == null) return;
+
+      final userDoc = await _firestore.collection('users').doc(uid).get();
+      String? userToken = userDoc.data()?['token'];
+
+      await SendNotificationService.sendNotificationUsingApi(
+        token: userToken,
+        title: 'Note Deleted',
+        body: 'One of your notes was Updated successfully.',
+        data: {"type": "note_delete", "noteId": noteId},
+      );
       await _firestore.collection('notes').doc(noteId).update({
         'title': title,
         'description': description,
